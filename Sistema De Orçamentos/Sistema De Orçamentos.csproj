@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disabled</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Sistema_De_Orçamentos</RootNamespace>
+    <RootNamespace>SistemaOrc</RootNamespace>
   </PropertyGroup>
 
 </Project>
