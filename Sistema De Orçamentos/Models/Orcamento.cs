@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SistemaOrc.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaOrc.Models
@@ -18,6 +19,8 @@ namespace SistemaOrc.Models
         public virtual Cliente Cliente { get; set; }
 
         public List<Servico> Servicos { get; set; }
+
+        public OrcamentoStatus Status { get; set; }
 
     }
 }

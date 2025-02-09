@@ -36,8 +36,6 @@ namespace SistemaOrc.Models
 
         public bool Ativo { get; set; }
 
-
-
         public List<Orcamento> Orcamentos { get; set; }
 
     }
