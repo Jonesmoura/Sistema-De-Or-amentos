@@ -7,7 +7,9 @@ namespace SistemaOrc.Repositories.Interfaces
         IEnumerable<Cliente> Clientes { get; }
         IEnumerable<Cliente> ClientesAtivos { get; }
 
-        Cliente GetClienteById(int id);
+        Cliente GetClienteById(int? id);
         void Insert(Cliente cliente);
+        void Edit(int id, Cliente cliente);
+        public void Delete(int id);
     }
 }

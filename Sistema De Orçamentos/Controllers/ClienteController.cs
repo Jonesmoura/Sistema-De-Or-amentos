@@ -34,6 +34,53 @@ namespace SistemaOrc.Controllers
             TempData["SuccessMessage"] = "Cliente cadastrado com sucesso!";
             return RedirectToAction("List");
 
-        }  
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || _clienteReposity.Clientes == null) 
+            { 
+                return NotFound();
+            }
+
+            var cliente = _clienteReposity.GetClienteById(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+            return View(cliente);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public IActionResult Edit(int id, Cliente cliente)
+        {
+            _clienteReposity.Edit(id, cliente);
+            TempData["SuccessMessage"] = "Cliente alterado com sucesso!";
+            return RedirectToAction("List");
+        }
+
+        public IActionResult Delete(int? id) 
+        {
+            if (id == null || _clienteReposity.Clientes == null)
+            {
+                return NotFound();
+            }
+            var cliente = _clienteReposity.GetClienteById(id);
+            return View(cliente);
+        
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            _clienteReposity.Delete(id);
+            TempData["SuccessMessage"] = "Cliente Excluído!";
+
+            return RedirectToAction("List");
+
+        }
     }
 }
