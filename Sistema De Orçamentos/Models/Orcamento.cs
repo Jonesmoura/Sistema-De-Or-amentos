@@ -9,7 +9,7 @@ namespace SistemaOrc.Models
     {
         [Key]
         public int OrcamentoId { get; set; }
-        public DateTime DataCriacao { get; set; }
+        public DateTime DataCriacao { get; set; } = DateTime.Now;
 
         [Display(Name = "Valor total do orçamento")]
         [Column(TypeName = "decimal(12,2)")]
@@ -20,7 +20,7 @@ namespace SistemaOrc.Models
 
         public List<Servico> Servicos { get; set; }
 
-        public OrcamentoStatus Status { get; set; }
+        public OrcamentoStatus Status { get; set; } = OrcamentoStatus.Pendente;
 
     }
 }

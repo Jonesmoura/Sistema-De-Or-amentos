@@ -1,0 +1,98 @@
+﻿@model SistemaOrc.Models.ViewModels.OrcamentoFormViewModel
+
+@{
+    ViewData["Title"] = "Criar Orçamento";
+
+    if (Model.Orcamento == null)
+    {
+        Model.Orcamento = new SistemaOrc.Models.Orcamento();
+    }
+
+    if (Model.Orcamento.Servicos == null)
+    {
+        Model.Orcamento.Servicos = new List<SistemaOrc.Models.Servico> { new SistemaOrc.Models.Servico() };
+    }
+}
+
+<h3>Novo Orçamento</h3>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label class="form-label">Cliente</label>
+        <select asp-for="Orcamento.ClienteId" class="form-control" asp-items="@(new SelectList(Model.Clientes, "ClienteId", "Nome"))">
+            <option value="">Selecione um Cliente</option>
+        </select>
+    </div>
+
+    <h4>Serviços</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Preço (R$)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="servicos-container">
+            @if (Model.Orcamento.Servicos.Count > 0)
+            {
+                @for (int i = 0; i < Model.Orcamento.Servicos.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" asp-for="Orcamento.Servicos[i].Descricao" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control valor-servico" asp-for="Orcamento.Servicos[i].Valor" oninput="atualizarValorTotal()" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" onclick="removerServico(this)">Remover</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-success" onclick="adicionarServico()">Adicionar Serviço</button>
+
+    <!-- Valor Total -->
+    <div class="mb-3 mt-3">
+        <label class="form-label">Valor Total (R$):</label>
+        <input type="text" name="Orcamento.ValorTotal" class="form-control" id="valorTotal" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Orçamento</button>
+</form>
+<!--
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+-->
+@section Scripts {
+    <script>
+        function atualizarValorTotal() {
+            let total = 0;
+            document.querySelectorAll(".valor-servico").forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById("valorTotal").value = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function adicionarServico() {
+            const index = document.querySelectorAll("#servicos-container tr").length;
+            const newRow = `
+                        <tr>
+                            <td><input type="text" class="form-control" name="Orcamento.Servicos[${index}].Descricao" /></td>
+                            <td><input type="number" class="form-control valor-servico" name="Orcamento.Servicos[${index}].Valor" oninput="atualizarValorTotal()" /></td>
+                            <td><button type="button" class="btn btn-danger" onclick="removerServico(this)">Remover</button></td>
+                        </tr>`;
+            document.getElementById("servicos-container").insertAdjacentHTML("beforeend", newRow);
+        }
+
+        function removerServico(button) {
+            button.closest("tr").remove();
+            atualizarValorTotal();
+        }
+    </script>
+}

@@ -6,5 +6,7 @@ namespace SistemaOrc.Repositories.Interfaces
     {
         IEnumerable<Orcamento> Orcamentos { get; }
         Orcamento GetOrcamentoById(int id);
+
+        void Insert(Orcamento orcamento);
     }
 }

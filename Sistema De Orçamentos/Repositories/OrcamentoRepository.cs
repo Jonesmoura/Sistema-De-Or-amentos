@@ -17,5 +17,12 @@ namespace SistemaOrc.Repositories
         public IEnumerable<Orcamento> Orcamentos => _context.Orcamentos.Include(obj => obj.Cliente);
 
         public Orcamento GetOrcamentoById(int id) => _context.Orcamentos.FirstOrDefault(obj => obj.OrcamentoId == id);
+
+        public void Insert(Orcamento orcamento)
+        {
+            _context.Add(orcamento);
+            _context.SaveChanges();
+        }
+
     }
 }
