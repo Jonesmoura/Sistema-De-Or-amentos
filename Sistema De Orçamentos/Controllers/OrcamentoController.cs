@@ -38,6 +38,9 @@ namespace SistemaOrc.Controllers
             //    var viewModel = new OrcamentoFormViewModel { Clientes = clientes };
             //    return View(viewModel);
             //}
+
+
+            TempData["SuccessMessage"] = "Orçamento criado com sucesso!";
             orcamento.Servicos.RemoveAll(s => string.IsNullOrWhiteSpace(s.Descricao) || s.Valor <= 0);
             _orcamentoRepository.Insert(orcamento);
             return RedirectToAction("Create");

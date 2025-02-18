@@ -19,7 +19,6 @@ namespace SistemaOrc.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal Valor { get; set; }
 
-
         public int OrcamentoId { get; set; }
         public virtual Orcamento Orcamento{ get; set; }
     }
