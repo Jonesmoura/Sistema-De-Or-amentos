@@ -1,0 +1,87 @@
+﻿@model SistemaOrc.Models.ViewModels.ListaOrcamentosViewModel
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>Buscar Orçamento</h1>
+
+<p>
+    <a asp-action="Create">Adicionar Orçamento</a>
+</p>
+
+<div class="parametrosBusca">
+    <form asp-action="Filter" method="get">
+        <div class="form-group">
+            <label>Data Mínima</label>
+            <input type="date" name="dateMin" class="form-control" value="@ViewData["DateMin"]" />
+        </div>
+
+        <div class="form-group">
+            <label>Data Máxima</label>
+            <input type="date" name="dateMax" class="form-control" value="@ViewData["DateMax"]" />
+        </div>
+
+        <div class="form-group">
+            <label>Status</label>
+            <select asp-for="SelectedStatus" class="form-control">
+                <option value="">Todos</option>
+                @foreach (var status in Model.Status)
+                {
+                    <option value="@status">@status</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Nome do Cliente</label>
+            <input type="text" name="cliente" class="form-control" value="@ViewData["Cliente"]" />
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Filtrar</button>
+        <a asp-action="List" class="btn btn-secondary mt-2">Limpar</a>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orcamentos.FirstOrDefault().DataCriacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orcamentos.FirstOrDefault().ValorTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orcamentos.FirstOrDefault().Cliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orcamentos.FirstOrDefault().Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Orcamentos) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataCriacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @* <a asp-action="Edit" asp-route-id="@item.OrcamentoId">Editar</a> | *@
+                @* <a asp-action="Details" asp-route-id="@item.OrcamentoId">Details</a> | *@
+                @* <a asp-action="Delete" asp-route-id="@item.OrcamentoId">Apagar</a> *@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
