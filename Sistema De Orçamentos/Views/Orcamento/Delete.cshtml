@@ -1,0 +1,44 @@
+﻿@model SistemaOrc.Models.Orcamento
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Excluir Orçamento</h1>
+
+<h3>Você realmente quer excluir este orçamento?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.OrcamentoId)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.OrcamentoId)
+        </dd>
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.ValorTotal)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.ValorTotal)
+        </dd>
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.Cliente)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.Cliente.Nome)
+        </dd>
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="OrcamentoId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="List">Voltar à Lista</a>
+    </form>
+</div>

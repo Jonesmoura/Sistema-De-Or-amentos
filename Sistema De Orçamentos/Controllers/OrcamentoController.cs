@@ -110,5 +110,21 @@ namespace SistemaOrc.Controllers
 
         }
 
+        public IActionResult Delete(int id)
+        {
+            var orcamento = _orcamentoRepository.GetOrcamentoById(id);
+            return View(orcamento);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id, bool confirm)
+        {
+            _orcamentoRepository.Delete(id);
+            TempData["SuccessMessage"] = "Orçamento excluído com sucesso!";
+            return RedirectToAction("List");
+        }
+
     }
 }

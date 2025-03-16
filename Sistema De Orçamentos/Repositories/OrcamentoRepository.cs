@@ -53,5 +53,12 @@ namespace SistemaOrc.Repositories
             _context.SaveChanges();
         }
 
+        public void Delete(int id)
+        {
+            var orcamento = GetOrcamentoById(id);
+            _context.Remove(orcamento);
+            _context.SaveChanges();
+        }
+
     }
 }
