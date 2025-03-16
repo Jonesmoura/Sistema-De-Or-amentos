@@ -1,0 +1,145 @@
+﻿@model SistemaOrc.Models.ViewModels.OrcamentoFormViewModel
+@using SistemaOrc.Models.Enums
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Edit";
+
+    if (Model.Orcamento == null)
+    {
+        Model.Orcamento = new SistemaOrc.Models.Orcamento();
+    }
+
+    if (Model.Orcamento.Servicos == null)
+    {
+        Model.Orcamento.Servicos = new List<SistemaOrc.Models.Servico> { new SistemaOrc.Models.Servico() };
+    }
+}
+
+<h3>Editar Orçamento</h3>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Orcamento.OrcamentoId" />
+    <div class="mb-3">
+        <label class="form-label">Cliente</label>
+        <select asp-for="Orcamento.ClienteId" class="form-control" asp-items="@(new SelectList(Model.Clientes, "ClienteId", "Nome"))">
+            <option value="">Selecione um Cliente</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select asp-for="Orcamento.Status" class="form-control"
+                asp-items="@(new SelectList(Enum.GetNames(typeof(OrcamentoStatus))))">
+            <option value="">Selecione um Status</option>
+        </select>
+    </div>
+
+    <h4>Serviços</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Preço (R$)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="servicos-container">
+            @if (Model.Orcamento.Servicos.Count > 0)
+            {
+                @for (int i = 0; i < Model.Orcamento.Servicos.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" asp-for="Orcamento.Servicos[i].ServicoId" />
+                            <input type="text" class="form-control" asp-for="Orcamento.Servicos[i].Descricao" />
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" placeholder="0.00" class="form-control valor-servico" asp-for="Orcamento.Servicos[i].Valor" oninput="atualizarValorTotal()" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" onclick="removerServico(this)">Remover</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-success" onclick="adicionarServico()">Adicionar Serviço</button>
+
+    <div class="mb-3 mt-3">
+        <label class="form-label">Valor Total (R$):</label>
+        <input type="text" name="Orcamento.ValorTotal" class="form-control" id="valorTotal" readonly />
+    </div>
+
+    <input type="hidden" asp-for="Orcamento.ValorTotal" />
+
+    <button type="submit" value="save" class="btn btn-primary">Atualizar Orçamento</button>
+</form>
+<div>
+    <a asp-action="List">Voltar à Lista</a>
+</div>
+@section Scripts {
+    <script>
+        function atualizarValorTotal() {
+            let total = 0;
+            document.querySelectorAll(".valor-servico").forEach(input => {
+                let valor = input.value.replace(',', '.'); // Substitui vírgula por ponto para parseFloat funcionar
+                total += parseFloat(valor) || 0; // Converte para número, ignorando erros
+            });
+
+            // Formata o valor final para o padrão brasileiro (60,5 e não 60.5)
+            let totalFormatado = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Define o valor corretamente nos inputs
+            document.getElementById("valorTotal").value = totalFormatado;
+            document.querySelector("input[name='Orcamento.ValorTotal']").value = totalFormatado;
+        }
+
+        function adicionarServico() {
+            const index = document.querySelectorAll("#servicos-container tr").length;
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>
+                    <input type="hidden" name="Orcamento.Servicos[${index}].ServicoId" value="0" /> 
+                    <input type="text" class="form-control" name="Orcamento.Servicos[${index}].Descricao" />
+                </td>
+                <td>
+                    <input type="text" class="form-control valor-servico" name="Orcamento.Servicos[${index}].Valor" oninput="atualizarValorTotal()" />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="removerServico(this)">Remover</button>
+                </td>
+            `;
+            document.getElementById("servicos-container").appendChild(newRow);
+            atualizarValorTotal();
+        }
+
+        function removerServico(button) {
+            const row = button.closest("tr");
+            const servicoId = row.querySelector("input[name$='.ServicoId']").value;
+
+            if (servicoId !== "0") {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "servicosExcluidos";
+                input.value = servicoId;
+                document.querySelector("form").appendChild(input);
+            }
+            row.remove();
+            reindexarServicos();
+            atualizarValorTotal();
+        }
+
+        function reindexarServicos() {
+            const rows = document.querySelectorAll("#servicos-container tr");
+            rows.forEach((row, index) => {
+                row.querySelector("input[name$='.ServicoId']").name = `Orcamento.Servicos[${index}].ServicoId`;
+                row.querySelector("input[name$='.Descricao']").name = `Orcamento.Servicos[${index}].Descricao`;
+                row.querySelector("input[name$='.Valor']").name = `Orcamento.Servicos[${index}].Valor`;
+            });
+        }
+
+        atualizarValorTotal();
+    </script>
+}

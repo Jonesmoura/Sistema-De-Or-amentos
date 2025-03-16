@@ -4,7 +4,17 @@
     ViewData["Title"] = "List";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    TempData["SuccessMessage"] = null;
+}
+
 <h1>Buscar Orçamento</h1>
+
 
 <p>
     <a asp-action="Create">Adicionar Orçamento</a>
@@ -47,6 +57,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Orcamentos.FirstOrDefault().OrcamentoId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Orcamentos.FirstOrDefault().DataCriacao)
             </th>
             <th>
@@ -65,6 +78,9 @@
 @foreach (var item in Model.Orcamentos) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.OrcamentoId)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.DataCriacao)
             </td>
             <td>
@@ -77,9 +93,9 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @* <a asp-action="Edit" asp-route-id="@item.OrcamentoId">Editar</a> | *@
+                <a asp-action="Edit" asp-route-id="@item.OrcamentoId">Editar</a> |
                 @* <a asp-action="Details" asp-route-id="@item.OrcamentoId">Details</a> | *@
-                @* <a asp-action="Delete" asp-route-id="@item.OrcamentoId">Apagar</a> *@
+                <a asp-action="Delete" asp-route-id="@item.OrcamentoId">Apagar</a> 
             </td>
         </tr>
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SistemaOrc.Models;
 using SistemaOrc.Models.ViewModels;
 using SistemaOrc.Repositories.Interfaces;
+using System.Globalization;
 
 namespace SistemaOrc.Controllers
 {
@@ -49,7 +51,7 @@ namespace SistemaOrc.Controllers
 
         public IActionResult List() 
         {
-            var orcamentos = _orcamentoRepository.Orcamentos.OrderBy(obj => obj.DataCriacao).ToList();
+            var orcamentos = _orcamentoRepository.Orcamentos.OrderBy(obj => obj.OrcamentoId).ToList();
             var clientes = _clienteReposity.Clientes.OrderBy(obj => obj.Nome).ToList();
 
             var viewModel = new ListaOrcamentosViewModel { Clientes = clientes, Orcamentos = orcamentos};
@@ -84,9 +86,28 @@ namespace SistemaOrc.Controllers
             }
 
             var clientes = _clienteReposity.Clientes.OrderBy(obj => obj.Nome).ToList();
-            var viewModel = new ListaOrcamentosViewModel { Clientes = clientes, Orcamentos = orcamentos.OrderBy(obj => obj.DataCriacao).ToList() };
+            var viewModel = new ListaOrcamentosViewModel { Clientes = clientes, Orcamentos = orcamentos.OrderBy(obj => obj.OrcamentoId).ToList() };
 
             return View("List", viewModel);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var orcamento = _orcamentoRepository.GetOrcamentoById(id);
+            var clientes = _clienteReposity.Clientes.OrderBy(obj => obj.Nome).ToList();
+            var viewModel = new OrcamentoFormViewModel { Orcamento = orcamento, Clientes = clientes };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public IActionResult Edit(OrcamentoFormViewModel viewModel, int[] servicosExcluidos)
+        {
+            _orcamentoRepository.Edit(viewModel.Orcamento, servicosExcluidos);
+            TempData["SuccessMessage"] = "Orçamento Editado com Sucesso!";
+            return RedirectToAction("List");
+
         }
 
     }

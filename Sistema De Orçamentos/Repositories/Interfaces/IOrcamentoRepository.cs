@@ -8,5 +8,7 @@ namespace SistemaOrc.Repositories.Interfaces
         Orcamento GetOrcamentoById(int id);
 
         void Insert(Orcamento orcamento);
+
+        void Edit(Orcamento orcamento, int[] servicosExcluidos);
     }
 }

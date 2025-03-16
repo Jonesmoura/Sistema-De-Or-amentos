@@ -16,11 +16,40 @@ namespace SistemaOrc.Repositories
 
         public IEnumerable<Orcamento> Orcamentos => _context.Orcamentos.Include(obj => obj.Cliente);
 
-        public Orcamento GetOrcamentoById(int id) => _context.Orcamentos.FirstOrDefault(obj => obj.OrcamentoId == id);
+        public Orcamento GetOrcamentoById(int id) => _context.Orcamentos.Include(obj => obj.Servicos).Include(obj => obj.Cliente).FirstOrDefault(obj => obj.OrcamentoId == id);
 
         public void Insert(Orcamento orcamento)
         {
             _context.Add(orcamento);
+            _context.SaveChanges();
+        }
+
+        public void Edit(Orcamento orcamento, int[] servicosExcluidos)
+        {
+            if (servicosExcluidos != null && servicosExcluidos.Length > 0)
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var servicoId in servicosExcluidos)
+                        {
+                            var servico = _context.Servicos.Find(servicoId);
+                            if (servico != null)
+                            {
+                                _context.Servicos.Remove(servico);
+                            }
+                        }
+                        _context.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                    }
+                }
+            }
+            _context.Update(orcamento);
             _context.SaveChanges();
         }
 
