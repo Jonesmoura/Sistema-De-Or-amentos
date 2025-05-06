@@ -1,0 +1,42 @@
+@startuml classDiagram
+
+class Cliente {
+  +int ClienteId
+  +string Nome
+  +string Celular
+  +string Email
+  +string CEP
+  +int Numero
+  +bool Ativo
+  +* Orcamentos
+}
+
+class Orcamento {
+  +int OrcamentoId
+  +DateTime DataCriacao
+  +decimal ValorTotal
+  +int ClienteId
+  +Cliente Cliente
+  +* Servicos
+  +OrcamentoStatus Status
+}
+
+class Servico {
+  +int ServicoId
+  +string Descricao
+  +decimal Valor
+  +int OrcamentoId
+  +Orcamento Orcamento
+}
+
+enum OrcamentoStatus {
+  Pendente
+  Aprovado
+  Concluido
+  Cancelado
+}
+
+Cliente "1" --> "0..*" Orcamento : possui >
+Orcamento "1" --> "1..*" Servico : inclui >
+
+@enduml

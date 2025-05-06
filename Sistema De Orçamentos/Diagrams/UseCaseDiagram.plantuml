@@ -1,0 +1,24 @@
+@startuml DiagramaDeCasosDeUso
+
+left to right direction
+actor Usuario
+
+rectangle "Sistema de Orçamentos" {
+  (Cadastrar Cliente)
+  (Atualizar Cliente)
+  (Criar Orçamento)
+  (Adicionar Serviço ao Orçamento)
+  (Atualizar Serviço do Orçamento)
+  (Listar Orçamentos)
+  (Atualizar Orçamento)
+}
+
+Usuario --> (Cadastrar Cliente)
+Usuario --> (Atualizar Cliente)
+Usuario --> (Criar Orçamento)
+Usuario --> (Adicionar Serviço ao Orçamento)
+Usuario --> (Atualizar Serviço do Orçamento)
+Usuario --> (Listar Orçamentos)
+Usuario --> (Atualizar Orçamento)
+
+@enduml
