@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MySql.EntityFrameworkCore;
 using SistemaOrc.Context;
 using SistemaOrc.Repositories;
 using SistemaOrc.Repositories.Interfaces;
@@ -8,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IClienteRepository,ClienteReposity>();
 builder.Services.AddTransient<IOrcamentoRepository,OrcamentoRepository>();
 builder.Services.AddTransient<IServicoRepository,ServicoRepository>();

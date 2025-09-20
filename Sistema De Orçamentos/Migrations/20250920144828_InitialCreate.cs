@@ -1,46 +1,45 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.EntityFrameworkCore.Metadata;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace SistemaOrc.Migrations
 {
-    public partial class init : Migration
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySQL:Charset", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "Clientes",
                 columns: table => new
                 {
-                    ClienteId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false),
-                    Celular = table.Column<string>(type: "varchar(13)", maxLength: 13, nullable: false),
-                    Email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    CEP = table.Column<string>(type: "varchar(9)", maxLength: 9, nullable: false),
-                    Numero = table.Column<int>(type: "int(6)", nullable: false),
-                    Ativo = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    ClienteId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
+                    Celular = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
+                    Email = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    CEP = table.Column<string>(type: "character varying(9)", maxLength: 9, nullable: false),
+                    Numero = table.Column<int>(type: "integer", nullable: false),
+                    Ativo = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clientes", x => x.ClienteId);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Orcamentos",
                 columns: table => new
                 {
-                    OrcamentoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ValorTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false)
+                    OrcamentoId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DataCriacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ValorTotal = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
+                    ClienteId = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,18 +50,17 @@ namespace SistemaOrc.Migrations
                         principalTable: "Clientes",
                         principalColumn: "ClienteId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Servicos",
                 columns: table => new
                 {
-                    ServicoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Descricao = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    OrcamentoId = table.Column<int>(type: "int", nullable: false)
+                    ServicoId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Descricao = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Valor = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    OrcamentoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,8 +71,7 @@ namespace SistemaOrc.Migrations
                         principalTable: "Orcamentos",
                         principalColumn: "OrcamentoId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orcamentos_ClienteId",
@@ -87,6 +84,7 @@ namespace SistemaOrc.Migrations
                 column: "OrcamentoId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

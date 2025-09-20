@@ -11,7 +11,7 @@ namespace SistemaOrc.Models
         [Display(Name = "Número do Orçamento")]
         public int OrcamentoId { get; set; }
         [Display(Name = "Data de Criação")]
-        public DateTime DataCriacao { get; set; } = DateTime.Now;
+        public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
         [Display(Name = "Valor total do orçamento (R$)")]
         [Column(TypeName = "decimal(12,2)")]
